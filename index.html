@@ -157,6 +157,7 @@
 
 <script src="js/chroma.min.js"></script>
 
+<script src="js/leaflet.ajax.min.js"></script>
   
       <script type="text/javascript">
 
@@ -174,8 +175,14 @@
     accessToken: 'pk.eyJ1Ijoiam9obnJicGFsbWVyIiwiYSI6ImFRTXhoaHcifQ.UwIptK0Is5dJdN8q-1djww'
 }).addTo(mymap);
   
-  
+
+$.getJSON("data/spain_muni_monthly_mean2021-01-01.geojson",function(data){
+    // add GeoJSON layer to the map once the file is loaded
+    L.geoJson(data).addTo(mymap);
+  });
+
     
+
 
   </script>  
 
