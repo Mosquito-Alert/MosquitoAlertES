@@ -166,36 +166,55 @@
 
 // function clamped_scale(v) { return v < 1 ? '#00000000' : chroma.scale(v); }
 
+var scale_spectral = chroma.scale("Spectral").domain([1,0]);
+
+const muni_max_vri = .5;
+
+function colorFromValue(value) {  
+      // if there's a negative value
+      if (value < 0) return null;
+
+    //Making 0.3 the max
+    var scaledValue = Math.min(value, muni_max_vri) / muni_max_vri;
+
+    var color = scale_spectral(scaledValue).hex();
+
+      return color;
+    };
+//  console.log("layer:", layer);
+
+//           layerGeo.addTo(mymap);
+
+
 mapboxgl.accessToken = "pk.eyJ1Ijoiam9obnJicGFsbWVyIiwiYSI6ImFRTXhoaHcifQ.UwIptK0Is5dJdN8q-1djww";
 
 var mymap = new mapboxgl.Map({
   container: "mapid",
-  style: "mapbox://styles/johnrbpalmer/cklcc4q673pe517k4n5co81sn",
+  style: "mapbox://styles/johnrbpalmer/ckvy3vkbv56vx14nm622jithb",
   center: { lat: 41.3851, lng: 2.1734 },
   zoom: 9
 });
 
 mymap.on('load', () => {
-mymap.addSource('johnrbpalmer.6f9hfd1y', {
+mymap.addSource('johnrbpalmer.48qdct4s', {
 type: 'vector',
 // Use any Mapbox-hosted tileset using its tileset id.
 // Learn more about where to find a tileset id:
 // https://docs.mapbox.com/help/glossary/tileset-id/
-url: 'mapbox://johnrbpalmer.6f9hfd1y'
+url: 'mapbox://johnrbpalmer.48qdct4s'
 });
 
 
-$.get('muni_preds_2021-08-01.json').done(function (data) {
+$.get('https://mosquito-alert.github.io/MosquitoAlertES/data/muni_preds_2021-08-01.json').done(function (data) {
 
 
-const matchExpression = ['match', ['get', 'NAMEUNIT']];
+const matchExpression = ['match', ['get', 'NATCODE']];
  
 for (const row of data) {
 // Convert the range of data values to a suitable color
-const green = row['ma_prob_mean'] * 255;
-const color = `rgb(0, ${green}, 0)`;
+const color = colorFromValue(row['ma_prob_mean']);
  
-matchExpression.push(row['ma_prob_mean'], color);
+matchExpression.push(row['NATCODE'].toString(), color);
 }
  
 // Last value is the default, used where there is no data
@@ -205,29 +224,27 @@ matchExpression.push('rgba(0, 0, 0, 0)');
 // Insert it below the 'admin-1-boundary-bg' layer in the style
 mymap.addLayer(
 {
-'id': 'test2-9yun15',
+'id': 'muni_join',
 'type': 'fill',
-'source': 'johnrbpalmer.6f9hfd1y',
-'source-layer': 'test2-9yun15',
+'source': 'johnrbpalmer.48qdct4s',
+'source-layer': 'spain_municipality_boundaries-dzvpt0',
 'paint': {
-'line-color': '#ff0000',
-'line-width': 1,
 'fill-color': matchExpression
 }
 },
-'testing'
+'admin-1-boundary-bg'
 );
 
-mymap.addLayer({
-'id': 'test2-9yun15',
-'type': 'line',
-'source': 'johnrbpalmer.6f9hfd1y',
-'source-layer': 'test2-9yun15',
-'paint': {
-'line-color': '#ff0000',
-'line-width': 1
-}
-});
+// mymap.addLayer({
+//'id': 'test2-9yun15',
+//'type': 'line',
+//'source': 'johnrbpalmer.6f9hfd1y',
+//'source-layer': 'test2-9yun15',
+//'paint': {
+//'line-color': '#ff0000',
+//'line-width': 1
+//}
+//});
 
 });
 
@@ -237,7 +254,7 @@ var date_today = new Date();
 
       var date_today_fmt = '2020-09-01';
 
-      add_layer(date_today_fmt, false);
+//      add_layer(date_today_fmt, false);
 
 });
 
@@ -304,7 +321,7 @@ layerGeo.addTo(mymap);
             });
           //  console.log("layer:", layer);
 
-            layerGeo.addTo(mymap);
+//           layerGeo.addTo(mymap);
 
           });
         });
