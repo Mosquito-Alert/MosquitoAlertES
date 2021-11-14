@@ -66,6 +66,9 @@
 
 <link rel="stylesheet" href="css/datepicker.css"/>
 
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
+
 
 </head>
 <body>
@@ -163,28 +166,83 @@
 
 // function clamped_scale(v) { return v < 1 ? '#00000000' : chroma.scale(v); }
 
-  var mymap = L.map('mapid').setView([41.3851, 2.1734], 11);
-  
-  
-  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 19,
-    id: 'johnrbpalmer/cklcc4q673pe517k4n5co81sn',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1Ijoiam9obnJicGFsbWVyIiwiYSI6ImFRTXhoaHcifQ.UwIptK0Is5dJdN8q-1djww'
-}).addTo(mymap);
-  
+mapboxgl.accessToken = "pk.eyJ1Ijoiam9obnJicGFsbWVyIiwiYSI6ImFRTXhoaHcifQ.UwIptK0Is5dJdN8q-1djww";
 
-$.getJSON("data/spain_muni_monthly_mean2021-01-01.geojson",function(data){
-    // add GeoJSON layer to the map once the file is loaded
-    L.geoJson(data).addTo(mymap);
-  });
+var mymap = new mapboxgl.Map({
+  container: "mapid",
+  style: "mapbox://styles/johnrbpalmer/cklcc4q673pe517k4n5co81sn",
+  center: { lat: 41.3851, lng: 2.1734 },
+  zoom: 9
+});
+
+mymap.on('load', () => {
+mymap.addSource('johnrbpalmer.6f9hfd1y', {
+type: 'vector',
+// Use any Mapbox-hosted tileset using its tileset id.
+// Learn more about where to find a tileset id:
+// https://docs.mapbox.com/help/glossary/tileset-id/
+url: 'mapbox://johnrbpalmer.6f9hfd1y'
+});
+
+
+$.get('muni_preds_2021-08-01.json').done(function (data) {
+
+
+const matchExpression = ['match', ['get', 'NAMEUNIT']];
+ 
+for (const row of data) {
+// Convert the range of data values to a suitable color
+const green = row['ma_prob_mean'] * 255;
+const color = `rgb(0, ${green}, 0)`;
+ 
+matchExpression.push(row['ma_prob_mean'], color);
+}
+ 
+// Last value is the default, used where there is no data
+matchExpression.push('rgba(0, 0, 0, 0)');
+ 
+// Add layer from the vector tile source to create the choropleth
+// Insert it below the 'admin-1-boundary-bg' layer in the style
+mymap.addLayer(
+{
+'id': 'test2-9yun15',
+'type': 'fill',
+'source': 'johnrbpalmer.6f9hfd1y',
+'source-layer': 'test2-9yun15',
+'paint': {
+'line-color': '#ff0000',
+'line-width': 1,
+'fill-color': matchExpression
+}
+},
+'testing'
+);
+
+mymap.addLayer({
+'id': 'test2-9yun15',
+'type': 'line',
+'source': 'johnrbpalmer.6f9hfd1y',
+'source-layer': 'test2-9yun15',
+'paint': {
+'line-color': '#ff0000',
+'line-width': 1
+}
+});
+}
+
+
+var date_today = new Date();
+      var date_today_fmt = date_today.getFullYear() + '-' + (1+date_today.getMonth()).toString().padStart(2, '0') + '-' + date_today.getDate().toString().padStart(2, '0'); 
+
+      var date_today_fmt = '2020-09-01';
+
+      add_layer(date_today_fmt, false);
+
+});
 
     
 
-
-  </script>  
+</script>  
 
 
 
@@ -258,12 +316,6 @@ var layerGeo;
 
 $(document).ready(function() {
 
-      var date_today = new Date();
-      var date_today_fmt = date_today.getFullYear() + '-' + (1+date_today.getMonth()).toString().padStart(2, '0') + '-' + date_today.getDate().toString().padStart(2, '0'); 
-
-      var date_today_fmt = '2020-09-01';
-
-      add_layer(date_today_fmt, false);
 
 $('#datepicker_id').datepicker({
     format: 'dd/mm/yyyy',
