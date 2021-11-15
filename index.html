@@ -190,19 +190,34 @@ mapboxgl.accessToken = "pk.eyJ1Ijoiam9obnJicGFsbWVyIiwiYSI6ImFRTXhoaHcifQ.UwIptK
 
 var mymap = new mapboxgl.Map({
   container: "mapid",
-  style: "mapbox://styles/johnrbpalmer/ckvy3vkbv56vx14nm622jithb",
+  style: "mapbox://styles/johnrbpalmer/cklcc4q673pe517k4n5co81sn",
   center: { lat: 41.3851, lng: 2.1734 },
   zoom: 9
 });
 
 mymap.on('load', () => {
+
 mymap.addSource('johnrbpalmer.48qdct4s', {
 type: 'vector',
 // Use any Mapbox-hosted tileset using its tileset id.
 // Learn more about where to find a tileset id:
 // https://docs.mapbox.com/help/glossary/tileset-id/
-url: 'mapbox://johnrbpalmer.48qdct4s'
+url: 'mapbox://johnrbpalmer.48qdct4s',
+maxzoom: 22,
+minzoom: 8
 });
+
+mymap.addSource('johnrbpalmer.4bfv6pbn', {
+type: 'vector',
+// Use any Mapbox-hosted tileset using its tileset id.
+// Learn more about where to find a tileset id:
+// https://docs.mapbox.com/help/glossary/tileset-id/
+url: 'mapbox://johnrbpalmer.4bfv6pbn',
+maxzoom: 8,
+minzoom: 0
+});
+
+
 
 
 $.get('https://mosquito-alert.github.io/MosquitoAlertES/data/muni_preds_2021-05-01.json').done(function (data) {
@@ -224,10 +239,28 @@ matchExpression.push('rgba(0, 0, 0, 0)');
 // Insert it below the 'admin-1-boundary-bg' layer in the style
 mymap.addLayer(
 {
-'id': 'muni_join',
+'id': 'muni_join_high_res',
 'type': 'fill',
 'source': 'johnrbpalmer.48qdct4s',
 'source-layer': 'spain_municipality_boundaries-dzvpt0',
+'maxzoom': 22,
+'minzoom': 8,
+'paint': {
+'fill-color': matchExpression
+}
+},
+'admin-1-boundary-bg'
+);
+
+
+mymap.addLayer(
+{
+'id': 'muni_join_low_res',
+'type': 'fill',
+'source': 'johnrbpalmer.4bfv6pbn',
+'source-layer': 'spain_municipality_boundaries-7m7u82',
+'maxzoom': 8,
+'minzoom': 0,
 'paint': {
 'fill-color': matchExpression
 }
