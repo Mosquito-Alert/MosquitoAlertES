@@ -129,10 +129,10 @@
 </div>
 
 <div class="container" style="z-index:10000; position: absolute; bottom: 15px; right: 42px; width: 5px">
-<span>0.0</span>
+<span>0</span>
 </div>
 <div class="container" style="z-index:10000; position: absolute; bottom: 305px; right: 42px; width: 5px;">
-<span>1</span>
+<span>0.5</span>
 </div>
 
 </div>  
@@ -166,7 +166,7 @@
 
 var scale_spectral = chroma.scale("Spectral").domain([1,0]);
 
-const muni_max_vri = 1;
+const muni_max_vri = .5;
 
 function colorFromValue(value) {  
       // if there's a negative value
@@ -284,7 +284,7 @@ mymap.addLayer(
 
   <script>
 
-const max_vri = 1 // setting max for color scale. May need to revisit this later
+const max_vri = 0.5 // setting max for color scale. May need to revisit this later
 
 function add_layer(a_date, remove_layer){
      
