@@ -82,16 +82,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.html">Risk Map</a>
+          <a class="nav-link" aria-current="page" href="index.html">Forecasted Risk</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="time_profiles.html">Time Profiles</a>
+          <a class="nav-link active" href="historical.html">Historical Risk</a>
         </li>
 <!--        <li class="nav-item">
           <a class="nav-link" href="daily.html">Daily Report</a>
-        </li>-->
+        </li>
         <li class="nav-item">
-          <a class="nav-link" href="about.html">About</a>
+          <a class="nav-link" href="about.html">About</a>-->
         </li>
         </ul>
 
@@ -132,7 +132,7 @@
 <span>0.0</span>
 </div>
 <div class="container" style="z-index:10000; position: absolute; bottom: 305px; right: 42px; width: 5px;">
-<span>1</span>
+<span>.5</span>
 </div>
 
 </div>  
@@ -166,7 +166,7 @@
 
 var scale_spectral = chroma.scale("Spectral").domain([1,0]);
 
-const muni_max_vri = 1;
+const muni_max_vri = 0.5;
 
 function colorFromValue(value) {  
       // if there's a negative value
@@ -284,7 +284,7 @@ mymap.addLayer(
 
   <script>
 
-const max_vri = .3 // setting max for color scale. May need to revisit this later
+const max_vri = 0.5 // setting max for color scale. May need to revisit this later
 
 function add_layer(a_date, remove_layer){
      
