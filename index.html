@@ -165,7 +165,7 @@
 
 // function clamped_scale(v) { return v < 1 ? '#00000000' : chroma.scale(v); }
 
-  var mymap = L.map('mapid').setView([41.3851, 2.1734], 11);
+  var mymap = L.map('mapid').setView([40.1467, -3.4872], 5);
   
   
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -243,6 +243,7 @@ $(document).ready(function() {
 
       var date_today = new Date();
       var date_today_fmt = date_today.getFullYear() + '-' + (1+date_today.getMonth()).toString().padStart(2, '0') + '-' + date_today.getDate().toString().padStart(2, '0'); 
+      var date_today_fmt = '2021-11-13'
 
       add_layer(date_today_fmt, false);
 
