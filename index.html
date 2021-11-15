@@ -164,8 +164,6 @@
   
       <script type="text/javascript">
 
-// function clamped_scale(v) { return v < 1 ? '#00000000' : chroma.scale(v); }
-
 var scale_spectral = chroma.scale("Spectral").domain([1,0]);
 
 const muni_max_vri = .5;
@@ -222,9 +220,8 @@ minzoom: 0
 
 $.get('https://mosquito-alert.github.io/MosquitoAlertES/data/muni_preds_2021-05-01.json').done(function (data) {
 
+  const matchExpression = ['match', ['get', 'NATCODE']];
 
-const matchExpression = ['match', ['get', 'NATCODE']];
- 
 for (const row of data) {
 // Convert the range of data values to a suitable color
 const color = colorFromValue(row['ma_prob_mean']);
@@ -268,26 +265,10 @@ mymap.addLayer(
 'admin-1-boundary-bg'
 );
 
-// mymap.addLayer({
-//'id': 'test2-9yun15',
-//'type': 'line',
-//'source': 'johnrbpalmer.6f9hfd1y',
-//'source-layer': 'test2-9yun15',
-//'paint': {
-//'line-color': '#ff0000',
-//'line-width': 1
-//}
-//});
 
 });
 
 
-var date_today = new Date();
-      var date_today_fmt = date_today.getFullYear() + '-' + (1+date_today.getMonth()).toString().padStart(2, '0') + '-' + date_today.getDate().toString().padStart(2, '0'); 
-
-      var date_today_fmt = '2020-09-01';
-
-//      add_layer(date_today_fmt, false);
 
 });
 
@@ -308,55 +289,55 @@ const max_vri = .3 // setting max for color scale. May need to revisit this late
 function add_layer(a_date, remove_layer){
      
       if(remove_layer == true){
-                  mymap.removeLayer(layerGeo);
+                  mymap.removeLayer('muni_join_low_res');
+                  mymap.removeLayer('muni_join_high_res');
           }
  
-          var service_url = "https://geotigre.ceab.csic.es/geoserver/gwc/service/wms?";
-      layerGeo = L.tileLayer.wms(service_url,
-{
-//  layers: 'ceab.tigadata:catalonia_mosquito_alert_probability_' + a_date + '_res20m_crs4326',
-  layers: 'ceab.tigadata:MALERT_prob_CAT_' + a_date,
-  format: 'image/png',
-  transparent: true,
-  tiled: true
-});
-layerGeo.addTo(mymap);
+          const matchExpression = ['match', ['get', 'NATCODE']];
+
+          $.get('https://mosquito-alert.github.io/MosquitoAlertES/data/muni_preds_' + a_date + '-01.json').done(function (data) {
+
+            for (const row of data) {
+// Convert the range of data values to a suitable color
+const color = colorFromValue(row['ma_prob_mean']);
+ 
+matchExpression.push(row['NATCODE'].toString(), color);
+}
+ 
+// Last value is the default, used where there is no data
+matchExpression.push('rgba(0, 0, 0, 0)');
 
 
+          mymap.addLayer(
+          {
+          'id': 'muni_join_high_res',
+          'type': 'fill',
+          'source': 'johnrbpalmer.48qdct4s',
+          'source-layer': 'spain_municipality_boundaries-dzvpt0',
+          'maxzoom': 22,
+          'minzoom': 8,
+          'paint': {
+          'fill-color': matchExpression
+          }
+          },
+          'admin-1-boundary-bg'
+          );
 
-      var url_to_geotiff_file = "https://mosquito-alert.github.io/bcn/data/vri" + a_date + ".tif";
 
-      fetch(url_to_geotiff_file)
-        .then(response => response.arrayBuffer())
-        .then(arrayBuffer => {
-          parseGeoraster(arrayBuffer).then(georaster => {
-
-            // available color scales can be found by running console.log(chroma.brewer);
-            var scale = chroma.scale("Spectral").domain([1,0]);
-
-            layerGeo = new GeoRasterLayer({
-                georaster: georaster,
-                opacity: 1,
-                pixelValuesToColorFn: function(pixelValues) {
-                  var pixelValue = pixelValues[0]; // there's just one band in this raster
-
-                  // if there's a negative value
-                  if (pixelValue < 0) return null;
-
-                //Making 0.3 the max
-                var scaledPixelValue = Math.min(pixelValue, max_vri) / max_vri;
-
-                var color = scale(scaledPixelValue).hex();
-
-                  return color;
-                },
-                resolution: 256
-            });
-          //  console.log("layer:", layer);
-
-//           layerGeo.addTo(mymap);
-
-          });
+          mymap.addLayer(
+          {
+          'id': 'muni_join_low_res',
+          'type': 'fill',
+          'source': 'johnrbpalmer.4bfv6pbn',
+          'source-layer': 'spain_municipality_boundaries-7m7u82',
+          'maxzoom': 8,
+          'minzoom': 0,
+          'paint': {
+          'fill-color': matchExpression
+          }
+          },
+          'admin-1-boundary-bg'
+          );
         });
 
 }
@@ -367,14 +348,19 @@ var layerGeo;
 
 $(document).ready(function() {
 
+  var date_today = new Date();
+      var date_today_fmt = date_today.getFullYear() + '-' + (1+date_today.getMonth()).toString().padStart(2, '0') + '-' + date_today.getDate().toString().padStart(2, '0'); 
+
+
 
 $('#datepicker_id').datepicker({
-    format: 'dd/mm/yyyy',
-    todayHighlight: true,
+    format: 'mm/yyyy',
+    viewMode: "months", 
+    minViewMode: "months"
 })
   .on('changeDate', function(e) {
       
-      var this_date = e.format('yyyy-mm-dd');
+      var this_date = e.format('yyyy-mm');
       var this_date_fmt = e.date.getFullYear() + '-' + (1+e.date.getMonth()).toString().padStart(2, '0') + '-' + e.date.getDate().toString().padStart(2, '0'); 
       
       if(e.date>date_today){
