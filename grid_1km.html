@@ -82,10 +82,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.html">Spain</a>
+          <a class="nav-link active" aria-current="page" href="index.html">Spain Risk Map</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="bcn.html">Barcelona</a>
+          <a class="nav-link" href="historical.html">Historical Risk</a>
         </li>
 <!--        <li class="nav-item">
           <a class="nav-link" href="daily.html">Daily Report</a>
@@ -132,7 +132,7 @@
 <span>0.0</span>
 </div>
 <div class="container" style="z-index:10000; position: absolute; bottom: 305px; right: 42px; width: 5px;">
-<span>1</span>
+<span>0.5</span>
 </div>
 
 </div>  
@@ -160,121 +160,27 @@
 
 <script src="js/chroma.min.js"></script>
 
-<script src="js/leaflet.ajax.min.js"></script>
   
       <script type="text/javascript">
 
-var scale_spectral = chroma.scale("Spectral").domain([1,0]);
+// function clamped_scale(v) { return v < 1 ? '#00000000' : chroma.scale(v); }
 
-const muni_max_vri = 1;
-
-function colorFromValue(value) {  
-      // if there's a negative value
-      if (value < 0) return null;
-
-    //Making 0.3 the max
-    var scaledValue = Math.min(value, muni_max_vri) / muni_max_vri;
-
-    var color = scale_spectral(scaledValue).hex();
-
-      return color;
-    };
-//  console.log("layer:", layer);
-
-//           layerGeo.addTo(mymap);
-
-
-mapboxgl.accessToken = "pk.eyJ1Ijoiam9obnJicGFsbWVyIiwiYSI6ImFRTXhoaHcifQ.UwIptK0Is5dJdN8q-1djww";
-
-var mymap = new mapboxgl.Map({
-  container: "mapid",
-  style: "mapbox://styles/johnrbpalmer/cklcc4q673pe517k4n5co81sn",
-  center: { lat: 40.1467, lng: -3.4872 },
-  zoom: 5
-});
-
-mymap.on('load', () => {
-
-mymap.addSource('johnrbpalmer.48qdct4s', {
-type: 'vector',
-// Use any Mapbox-hosted tileset using its tileset id.
-// Learn more about where to find a tileset id:
-// https://docs.mapbox.com/help/glossary/tileset-id/
-url: 'mapbox://johnrbpalmer.48qdct4s',
-maxzoom: 22,
-minzoom: 8
-});
-
-mymap.addSource('johnrbpalmer.4bfv6pbn', {
-type: 'vector',
-// Use any Mapbox-hosted tileset using its tileset id.
-// Learn more about where to find a tileset id:
-// https://docs.mapbox.com/help/glossary/tileset-id/
-url: 'mapbox://johnrbpalmer.4bfv6pbn',
-maxzoom: 8,
-minzoom: 0
-});
-
-
-
-
-$.get('https://mosquito-alert.github.io/MosquitoAlertES/data/muni_preds_2021-05-01.json').done(function (data) {
-
-  const matchExpression = ['match', ['get', 'NATCODE']];
-
-for (const row of data) {
-// Convert the range of data values to a suitable color
-const color = colorFromValue(row['ma_prob_mean']);
- 
-matchExpression.push(row['NATCODE'].toString(), color);
-}
- 
-// Last value is the default, used where there is no data
-matchExpression.push('rgba(0, 0, 0, 0)');
- 
-// Add layer from the vector tile source to create the choropleth
-// Insert it below the 'admin-1-boundary-bg' layer in the style
-mymap.addLayer(
-{
-'id': 'muni_join_high_res',
-'type': 'fill',
-'source': 'johnrbpalmer.48qdct4s',
-'source-layer': 'spain_municipality_boundaries-dzvpt0',
-'maxzoom': 22,
-'minzoom': 8,
-'paint': {
-'fill-color': matchExpression
-}
-},
-'admin-1-boundary-bg'
-);
-
-
-mymap.addLayer(
-{
-'id': 'muni_join_low_res',
-'type': 'fill',
-'source': 'johnrbpalmer.4bfv6pbn',
-'source-layer': 'spain_municipality_boundaries-7m7u82',
-'maxzoom': 8,
-'minzoom': 0,
-'paint': {
-'fill-color': matchExpression
-}
-},
-'admin-1-boundary-bg'
-);
-
-
-});
-
-
-
-});
-
+  var mymap = L.map('mapid').setView([40.1467, -3.4872], 5);
+  
+  
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 19,
+    id: 'johnrbpalmer/cklcc4q673pe517k4n5co81sn',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1Ijoiam9obnJicGFsbWVyIiwiYSI6ImFRTXhoaHcifQ.UwIptK0Is5dJdN8q-1djww'
+}).addTo(mymap);
+  
+  
     
 
-</script>  
+  </script>  
 
 
 
@@ -284,60 +190,47 @@ mymap.addLayer(
 
   <script>
 
-const max_vri = 1 // setting max for color scale. May need to revisit this later
+const max_vri = .5 // setting max for color scale. May need to revisit this later
 
 function add_layer(a_date, remove_layer){
      
       if(remove_layer == true){
-                  mymap.removeLayer('muni_join_low_res');
-                  mymap.removeLayer('muni_join_high_res');
+                  mymap.removeLayer(layerGeo);
           }
  
-          const matchExpression = ['match', ['get', 'NATCODE']];
+      var url_to_geotiff_file = "https://mosquito-alert.github.io/MosquitoAlertES/data/vri" + a_date + ".tif";
 
-          $.get('https://mosquito-alert.github.io/MosquitoAlertES/data/muni_preds_' + a_date + '-01.json').done(function (data) {
+      fetch(url_to_geotiff_file)
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => {
+          parseGeoraster(arrayBuffer).then(georaster => {
 
-            for (const row of data) {
-// Convert the range of data values to a suitable color
-const color = colorFromValue(row['ma_prob_mean']);
- 
-matchExpression.push(row['NATCODE'].toString(), color);
-}
- 
-// Last value is the default, used where there is no data
-matchExpression.push('rgba(0, 0, 0, 0)');
+            // available color scales can be found by running console.log(chroma.brewer);
+            var scale = chroma.scale("Spectral").domain([1,0]);
 
+            layerGeo = new GeoRasterLayer({
+                georaster: georaster,
+                opacity: 1,
+                pixelValuesToColorFn: function(pixelValues) {
+                  var pixelValue = pixelValues[0]; // there's just one band in this raster
 
-          mymap.addLayer(
-          {
-          'id': 'muni_join_high_res',
-          'type': 'fill',
-          'source': 'johnrbpalmer.48qdct4s',
-          'source-layer': 'spain_municipality_boundaries-dzvpt0',
-          'maxzoom': 22,
-          'minzoom': 8,
-          'paint': {
-          'fill-color': matchExpression
-          }
-          },
-          'admin-1-boundary-bg'
-          );
+                  // if there's a negative value
+                  if (pixelValue < 0) return null;
 
+                //Making 0.3 the max
+                var scaledPixelValue = Math.min(pixelValue, max_vri) / max_vri;
 
-          mymap.addLayer(
-          {
-          'id': 'muni_join_low_res',
-          'type': 'fill',
-          'source': 'johnrbpalmer.4bfv6pbn',
-          'source-layer': 'spain_municipality_boundaries-7m7u82',
-          'maxzoom': 8,
-          'minzoom': 0,
-          'paint': {
-          'fill-color': matchExpression
-          }
-          },
-          'admin-1-boundary-bg'
-          );
+                var color = scale(scaledPixelValue).hex();
+
+                  return color;
+                },
+                resolution: 256
+            });
+          //  console.log("layer:", layer);
+
+            layerGeo.addTo(mymap);
+
+          });
         });
 
 }
@@ -348,13 +241,14 @@ var layerGeo;
 
 $(document).ready(function() {
 
-  var date_today = new Date();
+      var date_today = new Date();
       var date_today_fmt = date_today.getFullYear() + '-' + (1+date_today.getMonth()).toString().padStart(2, '0') + '-' + date_today.getDate().toString().padStart(2, '0'); 
 
-
+      add_layer(date_today_fmt, false);
 
 $('#datepicker_id').datepicker({
-    format: 'dd/mm/yyyy'
+    format: 'dd/mm/yyyy',
+    todayHighlight: true,
 })
   .on('changeDate', function(e) {
       
