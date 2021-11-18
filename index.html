@@ -81,20 +81,29 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.html">Spain</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="bcn.html">Barcelona</a>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Risk Maps
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="index.html">Spain</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><h6 class="dropdown-header">CCAAs</h6></li>
+            <li><a class="dropdown-item" href="cat.html">Catalonia</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><h6 class="dropdown-header">Municipalities</h6></li>
+            <li><a class="dropdown-item" href="bcn.html">Barcelona</a></li>
+          </ul>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="time_profiles.html">Time Profiles</a>
         </li>
-<!--        <li class="nav-item">
+       <li class="nav-item">
           <a class="nav-link" href="daily.html">Daily Report</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="about.html">About</a>-->
+          <a class="nav-link" href="about.html">About</a>
         </li>
         </ul>
 
@@ -204,7 +213,7 @@ type: 'vector',
 // Learn more about where to find a tileset id:
 // https://docs.mapbox.com/help/glossary/tileset-id/
 url: 'mapbox://johnrbpalmer.48qdct4s',
-maxzoom: 22,
+maxzoom: 15,
 minzoom: 8
 });
 
@@ -358,7 +367,7 @@ $(document).ready(function() {
 
 $('#datepicker_id').datepicker({
     format: 'dd/mm/yyyy',
-    startDate: '18/04/2021',
+    startDate: '31/03/2021',
     endDate: '+5d'
 })
   .on('changeDate', function(e) {

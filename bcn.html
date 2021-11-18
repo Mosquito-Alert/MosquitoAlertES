@@ -72,38 +72,46 @@
 
 </head>
 <body>
-  
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="index.html">#MosquitoAlertES</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="index.html">Spain</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="bcn.html">Barcelona</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="time_profiles.html">Time Profiles</a>
-        </li>
-
-<!--        <li class="nav-item">
-          <a class="nav-link" href="daily.html">Daily Report</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="about.html">About</a>-->
-        </li>
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">#MosquitoAlertES</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+  
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Risk Maps
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="index.html">Spain</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><h6 class="dropdown-header">CCAAs</h6></li>
+              <li><a class="dropdown-item" href="cat.html">Catalonia</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><h6 class="dropdown-header">Municipalities</h6></li>
+              <li><a class="dropdown-item" href="bcn.html">Barcelona</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="time_profiles.html">Time Profiles</a>
+          </li>
+         <li class="nav-item">
+            <a class="nav-link" href="daily.html">Daily Report</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          </ul>
+  
         </ul>
-
-      </ul>
+      </div>
     </div>
-  </div>
-</nav>
-   
+  </nav>
+    
   <div class="container" style="z-index:10000; position: absolute; right: 20px; width: 200px;">
     
       <div class="row">
@@ -169,12 +177,12 @@
 
 // function clamped_scale(v) { return v < 1 ? '#00000000' : chroma.scale(v); }
 
-  var mymap = L.map('mapid').setView([41.3851, 2.1734], 11);
+  var mymap = L.map('mapid').setView([41.3851, 2.1734], 12);
   
   
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 19,
+    maxZoom: 20,
     id: 'johnrbpalmer/cklcc4q673pe517k4n5co81sn',
     tileSize: 512,
     zoomOffset: -1,
