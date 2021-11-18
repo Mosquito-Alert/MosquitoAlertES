@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MosquitoAlertES</title>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
 <meta name="msapplication-TileColor" content="#da532c">
 <meta name="theme-color" content="#ffffff">
 
@@ -90,7 +90,7 @@
 
 var myChart = echarts.init(document.getElementById('main'));
 
-$.get('https://mosquito-alert.github.io/bcn/data/bcn_time_profile_data.json').done(function (data) {
+$.get('https://mosquito-alert.github.io/MosquitoAlertES/data/time_profile_country.json').done(function (data) {
   
       var these_dates = data.map(function(item){return item['date']});
       var forecast_start = these_dates[these_dates.length - 7];
@@ -99,7 +99,7 @@ $.get('https://mosquito-alert.github.io/bcn/data/bcn_time_profile_data.json').do
     myChart.setOption({
        title: {
         left: 'center',
-        text: 'Barcelona Citywide VRI',
+        text: 'Spain Countrywide VRI',
     },
         tooltip: {
         trigger: 'axis',
@@ -132,7 +132,7 @@ $.get('https://mosquito-alert.github.io/bcn/data/bcn_time_profile_data.json').do
         type: 'value'
     },
     series: [{
-        data: data.map(function(item){return item['value']}),
+        data: data.map(function(item){return item['ma_prob_mean']}),
         type: 'line',
         showSymbol: false,
         smooth: true,
@@ -164,67 +164,100 @@ $.get('https://mosquito-alert.github.io/bcn/data/bcn_time_profile_data.json').do
 
 var district_chart = echarts.init(document.getElementById('district_chart'));
 
-$.get('https://mosquito-alert.github.io/bcn/data/bcn_district_means.json').done(function (data) {
+$.get('https://mosquito-alert.github.io/MosquitoAlertES/data/time_profile_ccaas.json').done(function (data) {
   
     var these_dates = [];
-    var district_names = ["Ciutat Vella", "Eixample", "Sants-Montjuïc", "Les Corts",  "Sarrià-Sant Gervasi",  "Gràcia",  "Horta-Guinardó",  "Nou Barris",  "Sant Andreu",  "Sant Martí"];
-    var D01 = [];
-    var D02 = [];
-    var D03 = [];
-    var D04 = [];
-    var D05 = [];
-    var D06 = [];
-    var D07 = [];
-    var D08 = [];
-    var D09 = [];
-    var D10 = [];
+    var ccaa_names = ["Galicia", "Principado de Asturias", "Cantabria", "País Vasco/Euskadi",  "Comunidad Foral de Navarra",  "La Rioja",  "Aragón",  "Comunidad de Madrid",  "Castilla y León",  "Castilla-La Mancha", "Extremadura", "Cataluña/Catalunya", "Comunitat Valenciana", "Illes Balears", "Andalucía", "Región de Murcia", "Ciudad Autónoma de Ceuta", "Ciudad Autónoma de Melilla"];
+    var ES11 = [];
+    var ES12 = [];
+    var ES13 = [];
+    var ES21 = [];
+    var ES22 = [];
+    var ES23 = [];
+    var ES24 = [];
+    var ES30 = [];
+    var ES41 = [];
+    var ES42 = [];
+    var ES43 = [];
+    var ES51 = [];
+    var ES52 = [];
+    var ES53 = [];
+    var ES61 = [];
+    var ES62 = [];
+    var ES63 = [];
+    var ES64 = [];
     
     
     data.forEach(function(item){
-      if (item['DISTRICTE']=='01') 
+      if (item['CODNUT2']=='ES11') 
       { these_dates.push(item['date']);
-        D01.push(item['value']);
+        ES11.push(item['ma_prob_mean']);
       };
 
-      if (item['DISTRICTE']=='02') 
-      { D02.push(item['value']);
+      if (item['CODNUT2']=='ES12') 
+      { ES12.push(item['ma_prob_mean']);
       };
 
-      if (item['DISTRICTE']=='03') 
-      { D03.push(item['value']);
-
-      };
-
-      if (item['DISTRICTE']=='04') 
-      { D04.push(item['value']);
+      if (item['CODNUT2']=='ES13') 
+      { ES13.push(item['ma_prob_mean']);
 
       };
 
-      if (item['DISTRICTE']=='05') { 
-        D05.push(item['value']);
+      if (item['CODNUT2']=='ES21') 
+      { ES21.push(item['ma_prob_mean']);
 
       };
 
-      if (item['DISTRICTE']=='06') 
-      { D06.push(item['value']);
+      if (item['CODNUT2']=='ES22') { 
+        ES22.push(item['ma_prob_mean']);
+
       };
 
-      if (item['DISTRICTE']=='07') 
-      { D07.push(item['value']);
+      if (item['CODNUT2']=='ES23') 
+      { ES23.push(item['ma_prob_mean']);
       };
 
-      if (item['DISTRICTE']=='08') 
-      { D08.push(item['value']);
+      if (item['CODNUT2']=='ES24') 
+      { ES24.push(item['ma_prob_mean']);
       };
 
-      if (item['DISTRICTE']=='09') 
-      { D09.push(item['value']);
+      if (item['CODNUT2']=='ES30') 
+      { ES30.push(item['ma_prob_mean']);
       };
 
-      if (item['DISTRICTE']=='10') 
-      { D10.push(item['value']);
+      if (item['CODNUT2']=='ES41') 
+      { ES41.push(item['ma_prob_mean']);
       };
-      
+
+      if (item['CODNUT2']=='ES42') 
+      { ES42.push(item['ma_prob_mean']);
+      };
+
+      if (item['CODNUT2']=='ES43') 
+      { ES43.push(item['ma_prob_mean']);
+      };
+      if (item['CODNUT2']=='ES51') 
+      { ES51.push(item['ma_prob_mean']);
+      };
+      if (item['CODNUT2']=='ES52') 
+      { ES52.push(item['ma_prob_mean']);
+      };
+      if (item['CODNUT2']=='ES53') 
+      { ES53.push(item['ma_prob_mean']);
+      };
+      if (item['CODNUT2']=='ES61') 
+      { ES61.push(item['ma_prob_mean']);
+      };
+      if (item['CODNUT2']=='ES62') 
+      { ES62.push(item['ma_prob_mean']);
+      };
+      if (item['CODNUT2']=='ES63') 
+      { ES63.push(item['ma_prob_mean']);
+      };
+      if (item['CODNUT2']=='ES64') 
+      { ES64.push(item['ma_prob_mean']);
+      };
+
           
       
     });
@@ -239,13 +272,15 @@ $.get('https://mosquito-alert.github.io/bcn/data/bcn_district_means.json').done(
     district_chart.setOption({
        title: {
         left: 'center',
-        text: 'Barcelona District VRI',
+        text: 'Automous Community VRI',
     },
     legend: {
-      data: district_names,
-      orient: 'vertical',
-      x: 'right',
-      y: 'center'
+      data: ccaa_names,
+      orient: 'horizontal',
+      type: 'scroll',
+      x: 'center',
+      y: 'top',
+      top: 20,
     },
     tooltip: {
         trigger: 'axis',
@@ -278,8 +313,8 @@ $.get('https://mosquito-alert.github.io/bcn/data/bcn_district_means.json').done(
         type: 'value'
     },
     series: [{
-        name: district_names[0],
-        data: D01,
+        name: ccaa_names[0],
+        data: ES11,
         emphasis: {
           focus: 'series'
         },
@@ -288,8 +323,8 @@ $.get('https://mosquito-alert.github.io/bcn/data/bcn_district_means.json').done(
         smooth: true
     },
     {
-        name: district_names[1],
-        data: D02,
+        name: ccaa_names[1],
+        data: ES12,
         emphasis: {
           focus: 'series'
         },
@@ -298,57 +333,115 @@ $.get('https://mosquito-alert.github.io/bcn/data/bcn_district_means.json').done(
         smooth: true
     },
     {
-        name: district_names[2],
-        data: D03,
+        name: ccaa_names[2],
+        data: ES13,
         type: 'line',
         showSymbol: false,
         smooth: true
     },
     {
-        name: district_names[3],
-        data: D04,
+        name: ccaa_names[3],
+        data: ES21,
         type: 'line',
         showSymbol: false,
         smooth: true
     },
     {
-        name: district_names[4],
-        data: D05,
+        name: ccaa_names[4],
+        data: ES22,
         type: 'line',
         showSymbol: false,
         smooth: true
     },
     {
-        name: district_names[5],
-        data: D06,
+        name: ccaa_names[5],
+        data: ES23,
         type: 'line',
         showSymbol: false,
         smooth: true
     },
     {
-        name: district_names[6],
-        data: D07,
+        name: ccaa_names[6],
+        data: ES24,
         type: 'line',
         showSymbol: false,
         smooth: true
     },
     {
-        name: district_names[7],
-        data: D08,
+        name: ccaa_names[7],
+        data: ES30,
         type: 'line',
         showSymbol: false,
         smooth: true
     },
     {
-        name: district_names[8],
-        data: D09,
+        name: ccaa_names[8],
+        data: ES41,
         type: 'line',
         showSymbol: false,
         smooth: true
     },
     {
-        name: district_names[9],
-        data: D10,
+        name: ccaa_names[9],
+        data: ES42,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+        name: ccaa_names[10],
+        data: ES43,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+        name: ccaa_names[11],
+        data: ES51,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+        name: ccaa_names[12],
+        data: ES52,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+        name: ccaa_names[13],
+        data: ES53,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+        name: ccaa_names[14],
+        data: ES61,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+        name: ccaa_names[15],
+        data: ES62,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+
+    {
+        name: ccaa_names[16],
+        data: ES63,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+
+    {
+        name: ccaa_names[17],
+        data: ES64,
         type: 'line',
         showSymbol: false,
         smooth: true,
