@@ -481,6 +481,239 @@ $.get('https://mosquito-alert.github.io/MosquitoAlertES/data/time_profile_ccaas.
 </div>
 
 
+
+
+<div class="row">
+
+  <!-- prepare a DOM container with width and height -->
+    <div id="top10_muni_chart" style="width: 100%;height:400px;"></div>
+
+    <script type="text/javascript">
+
+var top10_muni_chart = echarts.init(document.getElementById('top10_muni_chart'));
+
+$.get('https://mosquito-alert.github.io/MosquitoAlertES/data/time_data_top10_munis_alltime.json').done(function (data) {
+  
+  function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+  }
+ 
+
+    var these_muni_dates = [];
+    var muni_names = [];
+    var muni0_values = [];
+    var muni1_values = [];
+    var muni2_values = [];
+    var muni3_values = [];
+    var muni4_values = [];
+    var muni5_values = [];
+    var muni6_values = [];
+    var muni7_values = [];
+    var muni8_values = [];
+    var muni9_values = [];
+    
+    
+    data.forEach(function(item){
+      these_muni_dates.push(item['date']);
+        muni_names.push(item['NAMEUNIT']);
+      });
+      
+      these_muni_dates = these_muni_dates.filter(onlyUnique);
+      muni_names = muni_names.filter(onlyUnique);
+
+      data.forEach(function(item){
+        if(item['NAMEUNIT'] == muni_names[0])
+          { muni0_values.push(item['ma_prob_mean']);
+        }
+        if(item['NAMEUNIT'] == muni_names[1])
+          { muni1_values.push(item['ma_prob_mean']);
+        }
+        if(item['NAMEUNIT'] == muni_names[2])
+          { muni2_values.push(item['ma_prob_mean']);
+        }
+        if(item['NAMEUNIT'] == muni_names[3])
+          { muni3_values.push(item['ma_prob_mean']);
+        }
+        if(item['NAMEUNIT'] == muni_names[4])
+          { muni4_values.push(item['ma_prob_mean']);
+        }
+        if(item['NAMEUNIT'] == muni_names[5])
+          { muni5_values.push(item['ma_prob_mean']);
+        }
+        if(item['NAMEUNIT'] == muni_names[6])
+          { muni6_values.push(item['ma_prob_mean']);
+        }
+        if(item['NAMEUNIT'] == muni_names[7])
+          { muni7_values.push(item['ma_prob_mean']);
+        }
+        if(item['NAMEUNIT'] == muni_names[8])
+          { muni8_values.push(item['ma_prob_mean']);
+        }
+        if(item['NAMEUNIT'] == muni_names[9])
+          { muni9_values.push(item['ma_prob_mean']);
+        }
+
+
+
+      });
+
+
+  
+      var muni_forecast_start = these_muni_dates[these_muni_dates.length - 7];
+      var muni_forecast_end = these_muni_dates[these_muni_dates.length - 1];
+
+    top10_muni_chart.setOption({
+       title: {
+        left: 'center',
+        text: 'Municipality VRI for Highest 10 Municipalities',
+    },
+    legend: {
+      data: muni_names,
+      orient: 'horizontal',
+      type: 'scroll',
+      x: 'center',
+      y: 'top',
+      top: 20,
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross'
+        }
+    },   
+          toolbox: {
+        show: true,
+        feature: {
+            magicType: {type: ['line', 'bar']},
+            saveAsImage: {}
+        }
+    },
+      dataZoom: [
+        {
+            show: true,
+            realtime: true
+        },
+        {
+            type: 'inside',
+            realtime: true
+        }
+    ],
+    xAxis: {
+        type: 'category',
+        data: these_muni_dates,
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [{
+        name: muni_names[0],
+        data: muni0_values,
+        emphasis: {
+          focus: 'series'
+        },
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+      name: muni_names[1],
+        data: muni1_values,
+        emphasis: {
+          focus: 'series'
+        },
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+      name: muni_names[2],
+        data: muni2_values,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+      name: muni_names[3],
+        data: muni3_values,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+      name: muni_names[4],
+        data: muni4_values,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+      name: muni_names[5],
+        data: muni5_values,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+      name: muni_names[6],
+        data: muni6_values,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+      name: muni_names[7],
+        data: muni7_values,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+      name: muni_names[8],
+        data: muni8_values,
+        type: 'line',
+        showSymbol: false,
+        smooth: true
+    },
+    {
+      name: muni_names[9],
+        data: muni9_values,
+        type: 'line',
+        smooth: true,
+                markArea: {
+                itemStyle: {
+                    color: 'rgba(255, 173, 177, 0.4)'
+                },
+                data: [ [{
+                    name: 'Forecast',
+                    xAxis: muni_forecast_start
+                }, {
+                    xAxis: muni_forecast_end
+                }] ]
+            }
+
+    },
+    
+    ]
+    });
+});
+</script>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
 
   
