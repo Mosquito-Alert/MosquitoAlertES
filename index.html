@@ -230,7 +230,7 @@ minzoom: 0
 
 
 
-$.get('https://mosquito-alert.github.io/MosquitoAlertES/data/muni_preds_2021-11-15.json').done(function (data) {
+$.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/data/muni_preds_2021-11-15.json').done(function (data) {
 
   const matchExpression = ['match', ['get', 'NATCODE']];
 
@@ -307,7 +307,7 @@ function add_layer(a_date, remove_layer){
  
           const matchExpression = ['match', ['get', 'NATCODE']];
 
-          $.get('https://mosquito-alert.github.io/MosquitoAlertES/data/muni_preds_' + a_date + '.json').done(function (data) {
+          $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/data/muni_preds_' + a_date + '.json').done(function (data) {
 
             for (const row of data) {
 // Convert the range of data values to a suitable color
