@@ -105,7 +105,9 @@ var myChart = echarts.init(document.getElementById('main'));
 
 $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/data/time_profile_country.json').done(function (data) {
   
-      var these_dates = data.map(function(item){return item['date']});
+this_json = JSON.parse(data);
+
+      var these_dates = this_json.map(function(item){return item['date']});
       var forecast_start = these_dates[these_dates.length - 7];
       var forecast_end = these_dates[these_dates.length - 1];
 
@@ -145,7 +147,7 @@ $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/dat
         type: 'value'
     },
     series: [{
-        data: data.map(function(item){return item['ma_prob_mean']}),
+        data: this_json.map(function(item){return item['ma_prob_mean']}),
         type: 'line',
         showSymbol: false,
         smooth: true,
@@ -179,6 +181,8 @@ var district_chart = echarts.init(document.getElementById('district_chart'));
 
 $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/data/time_profile_ccaas.json').done(function (data) {
   
+  this_json = JSON.parse(data);
+
     var these_dates = [];
     var ccaa_names = ["Galicia", "Principado de Asturias", "Cantabria", "País Vasco/Euskadi",  "Comunidad Foral de Navarra",  "La Rioja",  "Aragón",  "Comunidad de Madrid",  "Castilla y León",  "Castilla-La Mancha", "Extremadura", "Cataluña/Catalunya", "Comunitat Valenciana", "Illes Balears", "Andalucía", "Región de Murcia", "Ciudad Autónoma de Ceuta", "Ciudad Autónoma de Melilla"];
     var ES11 = [];
@@ -201,7 +205,7 @@ $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/dat
     var ES64 = [];
     
     
-    data.forEach(function(item){
+    this_json.forEach(function(item){
       if (item['CODNUT2']=='ES11') 
       { these_dates.push(item['date']);
         ES11.push(item['ma_prob_mean']);
@@ -498,6 +502,7 @@ $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/dat
   return self.indexOf(value) === index;
   }
  
+  this_json = JSON.parse(data);
 
     var these_muni_dates = [];
     var muni_names = [];
@@ -513,7 +518,7 @@ $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/dat
     var muni9_values = [];
     
     
-    data.forEach(function(item){
+    this_json.forEach(function(item){
       these_muni_dates.push(item['date']);
         muni_names.push(item['NAMEUNIT']);
       });
@@ -521,7 +526,7 @@ $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/dat
       these_muni_dates = these_muni_dates.filter(onlyUnique);
       muni_names = muni_names.filter(onlyUnique);
 
-      data.forEach(function(item){
+      this_json.forEach(function(item){
         if(item['NAMEUNIT'] == muni_names[0])
           { muni0_values.push(item['ma_prob_mean']);
         }
