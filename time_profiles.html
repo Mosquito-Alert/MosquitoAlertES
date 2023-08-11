@@ -95,14 +95,16 @@
     return date;
 }
 
-
+function sortByDate(a, b) {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+}
 
 
 var myChart = echarts.init(document.getElementById('main'));
 
 $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/data/time_profile_country.json').done(function (data) {
   
-this_json = JSON.parse(data);
+this_json = JSON.parse(data).sort(sortByDate);
 
       var these_dates = this_json.map(function(item){return item['date']});
       var forecast_start = these_dates[these_dates.length - 7];
@@ -178,7 +180,7 @@ var district_chart = echarts.init(document.getElementById('district_chart'));
 
 $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/data/time_profile_ccaas.json').done(function (data) {
   
-  this_json = JSON.parse(data);
+  this_json = JSON.parse(data).sort(sortByDate);
 
     var these_dates = [];
     var ccaa_names = ["Galicia", "Principado de Asturias", "Cantabria", "País Vasco/Euskadi",  "Comunidad Foral de Navarra",  "La Rioja",  "Aragón",  "Comunidad de Madrid",  "Castilla y León",  "Castilla-La Mancha", "Extremadura", "Cataluña/Catalunya", "Comunitat Valenciana", "Illes Balears", "Andalucía", "Región de Murcia", "Ciudad Autónoma de Ceuta", "Ciudad Autónoma de Melilla"];
@@ -499,7 +501,7 @@ $.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/dat
   return self.indexOf(value) === index;
   }
  
-  this_json = JSON.parse(data);
+  this_json = JSON.parse(data).sort(sortByDate);
 
     var these_muni_dates = [];
     var muni_names = [];
