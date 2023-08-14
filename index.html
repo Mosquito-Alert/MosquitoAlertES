@@ -226,9 +226,11 @@ minzoom: 0
 });
 
 
+var date_today = new Date();
 
+var date_today_fmt = date_today.getFullYear() + '-' + (1+date_today.getMonth()).toString().padStart(2, '0') + '-' + date_today.getDate().toString().padStart(2, '0'); 
 
-$.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/data/muni_preds_2021-11-15.json').done(function (data) {
+$.get('https://raw.githubusercontent.com/Mosquito-Alert/MosquitoAlertES/main/data/muni_preds_' + date_today_fmt + '.json').done(function (data) {
 
   this_json = JSON.parse(data);
 
